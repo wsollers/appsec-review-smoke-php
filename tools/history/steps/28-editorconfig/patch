@@ -1,0 +1,16 @@
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 0000000..4d560fb
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,10 @@
++root = true
++
++[*]
++end_of_line = lf
++insert_final_newline = true
++charset = utf-8
++
++[*.php]
++indent_style = space
++indent_size = 4

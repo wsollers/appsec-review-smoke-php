@@ -1,0 +1,65 @@
+diff --git a/public/index.php b/public/index.php
+index 6aa3de8..66e361e 100644
+--- a/public/index.php
++++ b/public/index.php
+@@ -3,4 +3,7 @@
+ // appsec-review; see README.md.
+ declare(strict_types=1);
+ 
+-echo 'pong';
++require_once __DIR__ . '/../src/handler.php';
++
++$db = new PDO('sqlite:' . __DIR__ . '/../var/smoke.db');
++http_response_code(handle_request($db));
+diff --git a/src/handler.php b/src/handler.php
+new file mode 100644
+index 0000000..e5c5810
+--- /dev/null
++++ b/src/handler.php
+@@ -0,0 +1,27 @@
++<?php
++// Request handling for the smoke service. This repository is a deliberately vulnerable smoke target for
++// appsec-review; see README.md.
++declare(strict_types=1);
++
++require_once __DIR__ . '/store.php';
++
++
++$requests = 0;
++
++// Handles one request and returns an HTTP-like status code.
++function handle_request(PDO $db): int
++{
++    global $requests;
++    $action = $_GET['action'] ?? 'ping';
++    $status = 400;
++    $body = '';
++    if ($action === 'ping') {
++        $body = 'pong';
++        $status = 200;
++    }
++    if ($status >= 200 && $status < 300) {
++        $requests++;
++    }
++    echo $body;
++    return $status;
++}
+diff --git a/src/store.php b/src/store.php
+new file mode 100644
+index 0000000..2471b89
+--- /dev/null
++++ b/src/store.php
+@@ -0,0 +1,13 @@
++<?php
++// Settings and user lookups for the smoke service. This repository is a deliberately vulnerable smoke target for
++// appsec-review; see README.md.
++declare(strict_types=1);
++
++const SETTINGS_TABLE = 'smoke_settings';
++
++// Reads every setting; the table name is a compile-time constant.
++function load_settings(PDO $db): array
++{
++    $rows = $db->query('SELECT name, value FROM ' . SETTINGS_TABLE);
++    return $rows === false ? [] : $rows->fetchAll(PDO::FETCH_KEY_PAIR);
++}

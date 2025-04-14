@@ -1,0 +1,47 @@
+diff --git a/src/handler.php b/src/handler.php
+index efcfc04..b949929 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -4,6 +4,7 @@
+ declare(strict_types=1);
+ 
+ require_once __DIR__ . '/store.php';
++require_once __DIR__ . '/import.php';
+ 
+ const ASSET_ROOT = '/var/lib/smoke/assets';
+ const TEMPLATE_ROOT = '/var/lib/smoke/templates';
+@@ -53,6 +54,10 @@ function handle_request(PDO $db): int
+         $target = $_GET['return_to'] ?? '/';
+         header('Location: ' . $target);
+         $status = 302;
++    } elseif ($action === 'import' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
++        $entries = parse_manifest((string) file_get_contents('php://input'));
++        $body = $entries === null ? '' : (string) count($entries);
++        $status = $entries === null ? 422 : 200;
+     }
+     if ($status >= 200 && $status < 300) {
+         $requests++;
+diff --git a/src/import.php b/src/import.php
+new file mode 100644
+index 0000000..f809779
+--- /dev/null
++++ b/src/import.php
+@@ -0,0 +1,18 @@
++<?php
++// Manifest import for the smoke service. This repository is a deliberately vulnerable smoke target for
++// appsec-review; see README.md.
++declare(strict_types=1);
++
++// Parses the XML manifest the client posts and returns the entry names.
++function parse_manifest(string $xml): ?array
++{
++    $document = simplexml_load_string($xml, SimpleXMLElement::class, LIBXML_NOENT);
++    if ($document === false) {
++        return null;
++    }
++    $entries = [];
++    foreach ($document->entry as $entry) {
++        $entries[] = (string) $entry['name'];
++    }
++    return $entries;
++}

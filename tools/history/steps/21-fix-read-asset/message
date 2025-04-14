@@ -1,0 +1,7 @@
+Fix path traversal in read_asset (CWE-22)
+
+The asset action joined the requested name onto the asset root and read the
+result, so "../" sequences read files outside the asset directory.
+read_asset now reduces the name to its final path component with basename()
+before joining it; the call sits on the only path to the read, so a
+traversal sequence cannot reach the file system.

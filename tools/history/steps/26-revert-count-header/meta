@@ -1,0 +1,5 @@
+AUTHOR_NAME=Bao Nguyen
+AUTHOR_EMAIL=bao@example.com
+DATE=2026-04-24T13:05:00+0200
+ACTION=revert
+ARG=25

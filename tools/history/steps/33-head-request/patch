@@ -1,0 +1,15 @@
+diff --git a/src/handler.php b/src/handler.php
+index 027e977..7d2d722 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -93,7 +93,9 @@ function handle_request(PDO $db): int
+         $requests++;
+     }
+     header('X-Count: ' . $requests);
+-    echo $body;
++    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') {
++        echo $body;
++    }
+     audit($action, $_SERVER['HTTP_USER_AGENT'] ?? '-');
+     return $status;
+ }

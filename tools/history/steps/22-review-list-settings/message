@@ -1,0 +1,7 @@
+Review the settings ORDER BY report
+
+A scanner flagged the query in list_settings as SQL built by concatenation.
+The column name is matched against the SORTABLE list on the only path that
+reaches the query and the function returns early otherwise, so the request
+cannot inject SQL there: not exploitable, and the query is unchanged.
+Documented the check in a comment so the next reader does not reopen it.

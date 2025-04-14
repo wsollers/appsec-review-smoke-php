@@ -1,0 +1,4 @@
+Keep the state restore routine of the previous client
+
+The new client no longer sends a saved state; the routine stays until the old
+client is retired.

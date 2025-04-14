@@ -1,0 +1,14 @@
+diff --git a/src/handler.php b/src/handler.php
+index f761739..f0ba582 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -72,6 +72,9 @@ function handle_request(PDO $db): int
+     } elseif ($action === 'settings') {
+         $body = implode(',', list_settings($db, $_GET['order'] ?? 'name'));
+         $status = 200;
++    } elseif ($action === 'status') {
++        $body = 'smoke php ' . PHP_VERSION . ' settings ' . count(load_settings($db));
++        $status = 200;
+     }
+     if ($status >= 200 && $status < 300) {
+         $requests++;

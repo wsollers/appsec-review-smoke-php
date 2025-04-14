@@ -1,0 +1,17 @@
+diff --git a/src/handler.php b/src/handler.php
+index 49828b8..186aa92 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -4,7 +4,7 @@
+ declare(strict_types=1);
+ 
+ require_once __DIR__ . '/store.php';
+-require_once __DIR__ . '/import.php';
++require_once __DIR__ . '/manifest.php';
+ 
+ const ASSET_ROOT = '/var/lib/smoke/assets';
+ const TEMPLATE_ROOT = '/var/lib/smoke/templates';
+diff --git a/src/import.php b/src/manifest.php
+similarity index 100%
+rename from src/import.php
+rename to src/manifest.php

@@ -1,0 +1,4 @@
+Revert "Send an X-Count header with the request counter on every reply"
+
+The header breaks the caching proxy in front of the service; revert until it
+is configured to pass it through.

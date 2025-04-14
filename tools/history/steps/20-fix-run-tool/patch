@@ -1,0 +1,36 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 2e76cfd..144f666 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -13,3 +13,4 @@ All notable changes to this project are documented in this file. The format foll
+ ### Security
+ 
+ - 2026-01-10: Upgraded phpmailer/phpmailer from 6.4.0 to 6.5.0 (GHSA-77mr-wc79-m8j3 / CVE-2021-3603, untrusted code loaded by the language-file path, and CVE-2021-34551).
++- 2026-01-27: Fixed command injection in `run_tool` (CWE-78); tool names are now matched against a fixed list.
+diff --git a/src/handler.php b/src/handler.php
+index f0ba582..d19f3db 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -12,11 +12,19 @@ const AUDIT_LOG = '/var/log/smoke/audit.log';
+ 
+ $requests = 0;
+ 
+-// Runs a maintenance helper named by the request.
++// Runs one of the two maintenance helpers; any other name is refused.
+ function run_tool(string $name): bool
+ {
+-    $output = shell_exec('/usr/local/libexec/smoke/' . $name);
+-    return $output !== null;
++    global $requests;
++    if ($name === 'status') {
++        echo 'ok ' . $requests . "\n";
++        return true;
++    }
++    if ($name === 'version') {
++        echo 'smoke php ' . PHP_VERSION . "\n";
++        return true;
++    }
++    return false;
+ }
+ 
+ // Reads an asset named by the request; returns its bytes or null.

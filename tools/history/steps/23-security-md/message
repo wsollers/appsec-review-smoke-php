@@ -1,0 +1,5 @@
+Hardening review: record the fixed issues in SECURITY.md
+
+No code changes. The three security fixes in this history (the PHPMailer
+upgrade, run_tool and read_asset) are now described in one place with their
+dates.

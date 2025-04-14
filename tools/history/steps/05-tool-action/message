@@ -1,0 +1,4 @@
+Add a tool action that runs maintenance helpers
+
+The tool name comes from the request and selects a helper under
+/usr/local/libexec/smoke.

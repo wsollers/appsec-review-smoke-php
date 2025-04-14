@@ -1,0 +1,28 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 144f666..fa6285b 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -14,3 +14,4 @@ All notable changes to this project are documented in this file. The format foll
+ 
+ - 2026-01-10: Upgraded phpmailer/phpmailer from 6.4.0 to 6.5.0 (GHSA-77mr-wc79-m8j3 / CVE-2021-3603, untrusted code loaded by the language-file path, and CVE-2021-34551).
+ - 2026-01-27: Fixed command injection in `run_tool` (CWE-78); tool names are now matched against a fixed list.
++- 2026-02-08: Fixed path traversal in `read_asset` (CWE-22); asset names are reduced to their final path component.
+diff --git a/src/handler.php b/src/handler.php
+index d19f3db..49828b8 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -27,10 +27,12 @@ function run_tool(string $name): bool
+     return false;
+ }
+ 
+-// Reads an asset named by the request; returns its bytes or null.
++// Reads an asset named by the request; the name is reduced to its final path component
++// before it is joined onto the asset root, so it cannot leave that directory.
+ function read_asset(string $name): ?string
+ {
+-    $data = file_get_contents(ASSET_ROOT . '/' . $name);
++    $leaf = basename($name);
++    $data = file_get_contents(ASSET_ROOT . '/' . $leaf);
+     return $data === false ? null : $data;
+ }
+ 

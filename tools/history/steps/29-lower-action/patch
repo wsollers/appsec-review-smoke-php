@@ -1,0 +1,12 @@
+diff --git a/src/handler.php b/src/handler.php
+index 0fe777c..dfd9690 100644
+--- a/src/handler.php
++++ b/src/handler.php
+@@ -54,6 +54,7 @@ function handle_request(PDO $db): int
+ {
+     global $requests;
+     $action = $_GET['action'] ?? 'ping';
++    $action = strtolower(trim($action));
+     $status = 400;
+     $body = '';
+     if ($action === 'ping') {

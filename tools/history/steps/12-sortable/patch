@@ -1,0 +1,26 @@
+diff --git a/src/store.php b/src/store.php
+index 2471b89..3749c88 100644
+--- a/src/store.php
++++ b/src/store.php
+@@ -4,6 +4,7 @@
+ declare(strict_types=1);
+ 
+ const SETTINGS_TABLE = 'smoke_settings';
++const SORTABLE = ['name', 'updated_at'];
+ 
+ // Reads every setting; the table name is a compile-time constant.
+ function load_settings(PDO $db): array
+@@ -11,3 +12,13 @@ function load_settings(PDO $db): array
+     $rows = $db->query('SELECT name, value FROM ' . SETTINGS_TABLE);
+     return $rows === false ? [] : $rows->fetchAll(PDO::FETCH_KEY_PAIR);
+ }
++
++// Lists setting names in the requested order; only the two indexed columns may be named.
++function list_settings(PDO $db, string $order): array
++{
++    if (!in_array($order, SORTABLE, true)) {
++        return [];
++    }
++    $rows = $db->query('SELECT name FROM smoke_settings ORDER BY ' . $order);
++    return $rows === false ? [] : $rows->fetchAll(PDO::FETCH_COLUMN);
++}

@@ -1,0 +1,77 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 32160ba..2e76cfd 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -9,3 +9,7 @@ All notable changes to this project are documented in this file. The format foll
+ 
+ - Smoke service with ping, tool and asset actions.
+ - Composer manifest pinning the HTTP client, templating and mail libraries.
++
++### Security
++
++- 2026-01-10: Upgraded phpmailer/phpmailer from 6.4.0 to 6.5.0 (GHSA-77mr-wc79-m8j3 / CVE-2021-3603, untrusted code loaded by the language-file path, and CVE-2021-34551).
+diff --git a/composer.json b/composer.json
+index 2151366..931cd3e 100644
+--- a/composer.json
++++ b/composer.json
+@@ -7,7 +7,7 @@
+         "php": "^8.3",
+         "guzzlehttp/guzzle": "7.4.0",
+         "twig/twig": "3.3.0",
+-        "phpmailer/phpmailer": "6.4.0"
++        "phpmailer/phpmailer": "6.5.0"
+     },
+     "conflict": {
+         "guzzlehttp/psr7": ">2.1.0"
+diff --git a/composer.lock b/composer.lock
+index 5f3139c..968ad2b 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "1c507700b04540db6e85fa194950a306",
++    "content-hash": "4fb6bb2f44f7f7860aa6796bcfbfcd15",
+     "packages": [
+         {
+             "name": "guzzlehttp/guzzle",
+@@ -326,16 +326,16 @@
+         },
+         {
+             "name": "phpmailer/phpmailer",
+-            "version": "v6.4.0",
++            "version": "v6.5.0",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/PHPMailer/PHPMailer.git",
+-                "reference": "050d430203105c27c30efd1dce7aa421ad882d01"
++                "reference": "a5b5c43e50b7fba655f793ad27303cd74c57363c"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/050d430203105c27c30efd1dce7aa421ad882d01",
+-                "reference": "050d430203105c27c30efd1dce7aa421ad882d01",
++                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a5b5c43e50b7fba655f793ad27303cd74c57363c",
++                "reference": "a5b5c43e50b7fba655f793ad27303cd74c57363c",
+                 "shasum": ""
+             },
+             "require": {
+@@ -390,7 +390,7 @@
+             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
+             "support": {
+                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
+-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.4.0"
++                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.0"
+             },
+             "funding": [
+                 {
+@@ -398,7 +398,7 @@
+                     "type": "github"
+                 }
+             ],
+-            "time": "2021-03-31T20:06:42+00:00"
++            "time": "2021-06-16T14:33:43+00:00"
+         },
+         {
+             "name": "psr/http-client",

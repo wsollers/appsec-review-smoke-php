@@ -1,0 +1,3 @@
+Rename import.php to manifest.php
+
+The file holds the manifest parser; the action keeps its name.

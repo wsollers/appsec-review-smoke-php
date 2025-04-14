@@ -1,0 +1,4 @@
+Add the request handler with a ping action
+
+index.php opens the database and hands the request to handle_request, which
+dispatches on the action parameter.

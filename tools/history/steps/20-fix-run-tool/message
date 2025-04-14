@@ -1,0 +1,8 @@
+Fix command injection in run_tool (CWE-78)
+
+The tool action passed the tool name from the request into a shell command
+string and ran it with shell_exec(), so a name containing shell
+metacharacters ran arbitrary commands as the web server user. run_tool now
+matches the name against the two helpers it supports and performs them in
+PHP: there is no command string and no shell, so no request input reaches
+a command interpreter.

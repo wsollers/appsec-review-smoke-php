@@ -1,0 +1,150 @@
+diff --git a/composer.json b/composer.json
+new file mode 100644
+index 0000000..be0b7ef
+--- /dev/null
++++ b/composer.json
+@@ -0,0 +1,18 @@
++{
++    "name": "appsec-review/smoke-php",
++    "description": "appsec-review smoke target (php): deliberately vulnerable, do not deploy",
++    "type": "project",
++    "license": "MIT",
++    "require": {
++        "php": "^8.3"
++    },
++    "config": {
++        "platform": {
++            "php": "8.3.6"
++        },
++        "sort-packages": true
++    },
++    "scripts": {
++        "lint": "for f in $(find public src -name \"*.php\"); do php -l \"$f\" || exit 1; done"
++    }
++}
+diff --git a/public/index.php b/public/index.php
+new file mode 100644
+index 0000000..6aa3de8
+--- /dev/null
++++ b/public/index.php
+@@ -0,0 +1,6 @@
++<?php
++// Entry point of the smoke service: one request per invocation. This repository is a deliberately vulnerable smoke target for
++// appsec-review; see README.md.
++declare(strict_types=1);
++
++echo 'pong';
+diff --git a/src/synthetic.php b/src/synthetic.php
+new file mode 100644
+index 0000000..b81099d
+--- /dev/null
++++ b/src/synthetic.php
+@@ -0,0 +1,108 @@
++<?php
++// Synthetic PHP service for the appsec-review graph-export fixture. Hand-authored: PHP has no
++// CodeQL extractor, so the dataflow producers for this file are Semgrep taint and Psalm.
++declare(strict_types=1);
++
++const ALLOWED = ['alpha', 'beta'];
++const FILE_ROOT = '/srv/files';
++
++function run_query(PDO $conn, string $query): array
++{
++    $statement = $conn->query($query);
++    return $statement->fetchAll();
++}
++
++function show_user(PDO $conn): string
++{
++    $name = $_GET['name'];
++    $rows = run_query($conn, "SELECT * FROM users WHERE name = '" . $name . "'");
++    return (string) count($rows);
++}
++
++function ping_host(): string
++{
++    $host = $_GET['host'];
++    if (in_array($host, ALLOWED, true)) {
++        system('ping -c 1 ' . $host);
++    }
++    system('nslookup ' . $host);
++    return 'ok';
++}
++
++function read_file(): string
++{
++    $safe = basename($_GET['file']);
++    file_get_contents(FILE_ROOT . '/' . $safe);
++    return 'read';
++}
++
++function fetch_url(): string
++{
++    $url = $_POST['url'];
++    file_get_contents($url);
++    return 'fetched';
++}
++
++function load_blob(): string
++{
++    $blob = file_get_contents('php://input');
++    unserialize($blob);
++    return 'loaded';
++}
++
++interface Handler
++{
++    public function run(string $value): string;
++}
++
++abstract class Prefixed implements Handler
++{
++    public function __construct(protected string $prefix)
++    {
++    }
++
++    public function handle(string $value): string
++    {
++        return $this->run($value);
++    }
++}
++
++final class Upper extends Prefixed
++{
++    public function run(string $value): string
++    {
++        return $this->prefix . strtoupper($value);
++    }
++}
++
++final class Lower extends Prefixed
++{
++    public function run(string $value): string
++    {
++        return $this->prefix . strtolower($value);
++    }
++}
++
++function dispatch(Prefixed $handler, string $action, string $value): string
++{
++    return call_user_func([$handler, $action], $value);
++}
++
++function invoke(callable $callback, string $value): string
++{
++    return $callback($value);
++}
++
++function main(array $argv): void
++{
++    $conn = new PDO('sqlite::memory:');
++    run_query($conn, 'SELECT * FROM t WHERE id = ' . $argv[1]);
++    run_query($conn, "SELECT * FROM t WHERE pw = '" . readline('password: ') . "'");
++    system(getenv('APP_HOOK'));
++    dispatch(new Upper('>'), 'handle', $argv[2]);
++    invoke('strtoupper', $argv[3]);
++}
++
++if (PHP_SAPI === 'cli' && realpath($argv[0] ?? '') === __FILE__) {
++    main($argv);
++}

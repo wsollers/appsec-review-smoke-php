@@ -1,0 +1,5 @@
+Pin the HTTP client, templating and mail libraries
+
+guzzlehttp/guzzle 7.4.0, twig/twig 3.3.0 and phpmailer/phpmailer 6.4.0, locked with
+composer update --no-install; guzzlehttp/psr7 is held at 2.1.0 until the
+stream wrapper is checked against the newer releases.

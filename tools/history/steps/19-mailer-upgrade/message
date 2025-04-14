@@ -1,0 +1,7 @@
+Upgrade phpmailer/phpmailer from 6.4.0 to 6.5.0
+
+PHPMailer 6.4.0 can load untrusted code when the language-file path comes
+from a caller (GHSA-77mr-wc79-m8j3, CVE-2021-3603) and can call an
+attacker-supplied validator (CVE-2021-34551). We do not call either entry
+point, but the pin is in our lockfile and shows up in every scan. 6.5.0
+fixes both; composer update --no-install regenerated the lock.
