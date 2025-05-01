@@ -1,0 +1,18 @@
+{
+    "name": "appsec-review/smoke-php",
+    "description": "appsec-review smoke target (php): deliberately vulnerable, do not deploy",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3"
+    },
+    "config": {
+        "platform": {
+            "php": "8.3.6"
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "lint": "for f in $(find public src -name \"*.php\"); do php -l \"$f\" || exit 1; done"
+    }
+}
