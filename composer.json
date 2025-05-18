@@ -4,7 +4,13 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "^8.3"
+        "php": "^8.3",
+        "guzzlehttp/guzzle": "7.4.0",
+        "twig/twig": "3.3.0",
+        "phpmailer/phpmailer": "6.4.0"
+    },
+    "conflict": {
+        "guzzlehttp/psr7": ">2.1.0"
     },
     "config": {
         "platform": {
