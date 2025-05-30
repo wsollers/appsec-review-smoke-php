@@ -3,4 +3,7 @@
 // appsec-review; see README.md.
 declare(strict_types=1);
 
-echo 'pong';
+require_once __DIR__ . '/../src/handler.php';
+
+$db = new PDO('sqlite:' . __DIR__ . '/../var/smoke.db');
+http_response_code(handle_request($db));
