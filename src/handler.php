@@ -49,6 +49,10 @@ function handle_request(PDO $db): int
     } elseif ($action === 'template' && isset($_GET['name'])) {
         $body = serve_template($_GET['name']) ?? '';
         $status = $body === '' ? 404 : 200;
+    } elseif ($action === 'redirect') {
+        $target = $_GET['return_to'] ?? '/';
+        header('Location: ' . $target);
+        $status = 302;
     }
     if ($status >= 200 && $status < 300) {
         $requests++;
