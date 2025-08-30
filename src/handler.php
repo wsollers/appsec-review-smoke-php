@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/store.php';
+require_once __DIR__ . '/import.php';
 
 const ASSET_ROOT = '/var/lib/smoke/assets';
 const TEMPLATE_ROOT = '/var/lib/smoke/templates';
@@ -53,6 +54,10 @@ function handle_request(PDO $db): int
         $target = $_GET['return_to'] ?? '/';
         header('Location: ' . $target);
         $status = 302;
+    } elseif ($action === 'import' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+        $entries = parse_manifest((string) file_get_contents('php://input'));
+        $body = $entries === null ? '' : (string) count($entries);
+        $status = $entries === null ? 422 : 200;
     }
     if ($status >= 200 && $status < 300) {
         $requests++;
