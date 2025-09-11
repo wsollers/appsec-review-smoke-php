@@ -8,6 +8,7 @@ require_once __DIR__ . '/import.php';
 
 const ASSET_ROOT = '/var/lib/smoke/assets';
 const TEMPLATE_ROOT = '/var/lib/smoke/templates';
+const AUDIT_LOG = '/var/log/smoke/audit.log';
 
 $requests = 0;
 
@@ -30,6 +31,12 @@ function serve_template(string $name): ?string
 {
     $data = file_get_contents(TEMPLATE_ROOT . '/' . $name);
     return $data === false ? null : $data;
+}
+
+// Appends one line per request to the audit log.
+function audit(string $action, string $detail): void
+{
+    file_put_contents(AUDIT_LOG, date('c') . ' ' . $action . ' ' . $detail . "\n", FILE_APPEND);
 }
 
 // Handles one request and returns an HTTP-like status code.
@@ -63,5 +70,6 @@ function handle_request(PDO $db): int
         $requests++;
     }
     echo $body;
+    audit($action, $_SERVER['HTTP_USER_AGENT'] ?? '-');
     return $status;
 }
