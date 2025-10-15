@@ -22,3 +22,10 @@ function list_settings(PDO $db, string $order): array
     $rows = $db->query('SELECT name FROM smoke_settings ORDER BY ' . $order);
     return $rows === false ? [] : $rows->fetchAll(PDO::FETCH_COLUMN);
 }
+
+// Finds users by name; the driver quotes the name before it enters the statement.
+function search_users(PDO $db, string $name): array
+{
+    $rows = $db->query('SELECT id, name FROM users WHERE name = ' . $db->quote($name));
+    return $rows === false ? [] : $rows->fetchAll(PDO::FETCH_ASSOC);
+}
