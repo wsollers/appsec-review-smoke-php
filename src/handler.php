@@ -65,6 +65,10 @@ function handle_request(PDO $db): int
         $entries = parse_manifest((string) file_get_contents('php://input'));
         $body = $entries === null ? '' : (string) count($entries);
         $status = $entries === null ? 422 : 200;
+    } elseif ($action === 'search' && isset($_GET['q'])) {
+        $rows = search_users($db, $_GET['q']);
+        $body = (string) count($rows);
+        $status = $rows === [] ? 404 : 200;
     }
     if ($status >= 200 && $status < 300) {
         $requests++;
