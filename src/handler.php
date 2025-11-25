@@ -69,6 +69,9 @@ function handle_request(PDO $db): int
         $rows = search_users($db, $_GET['q']);
         $body = (string) count($rows);
         $status = $rows === [] ? 404 : 200;
+    } elseif ($action === 'settings') {
+        $body = implode(',', list_settings($db, $_GET['order'] ?? 'name'));
+        $status = 200;
     }
     if ($status >= 200 && $status < 300) {
         $requests++;
