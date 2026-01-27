@@ -12,11 +12,19 @@ const AUDIT_LOG = '/var/log/smoke/audit.log';
 
 $requests = 0;
 
-// Runs a maintenance helper named by the request.
+// Runs one of the two maintenance helpers; any other name is refused.
 function run_tool(string $name): bool
 {
-    $output = shell_exec('/usr/local/libexec/smoke/' . $name);
-    return $output !== null;
+    global $requests;
+    if ($name === 'status') {
+        echo 'ok ' . $requests . "\n";
+        return true;
+    }
+    if ($name === 'version') {
+        echo 'smoke php ' . PHP_VERSION . "\n";
+        return true;
+    }
+    return false;
 }
 
 // Reads an asset named by the request; returns its bytes or null.
