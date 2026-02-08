@@ -27,10 +27,12 @@ function run_tool(string $name): bool
     return false;
 }
 
-// Reads an asset named by the request; returns its bytes or null.
+// Reads an asset named by the request; the name is reduced to its final path component
+// before it is joined onto the asset root, so it cannot leave that directory.
 function read_asset(string $name): ?string
 {
-    $data = file_get_contents(ASSET_ROOT . '/' . $name);
+    $leaf = basename($name);
+    $data = file_get_contents(ASSET_ROOT . '/' . $leaf);
     return $data === false ? null : $data;
 }
 
