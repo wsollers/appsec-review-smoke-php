@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/store.php';
-require_once __DIR__ . '/import.php';
+require_once __DIR__ . '/manifest.php';
 
 const ASSET_ROOT = '/var/lib/smoke/assets';
 const TEMPLATE_ROOT = '/var/lib/smoke/templates';
