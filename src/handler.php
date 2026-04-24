@@ -89,7 +89,6 @@ function handle_request(PDO $db): int
     if ($status >= 200 && $status < 300) {
         $requests++;
     }
-    header('X-Count: ' . $requests);
     echo $body;
     audit($action, $_SERVER['HTTP_USER_AGENT'] ?? '-');
     return $status;
