@@ -54,6 +54,7 @@ function handle_request(PDO $db): int
 {
     global $requests;
     $action = $_GET['action'] ?? 'ping';
+    $action = strtolower(trim($action));
     $status = 400;
     $body = '';
     if ($action === 'ping') {
