@@ -86,6 +86,8 @@ function handle_request(PDO $db): int
     } elseif ($action === 'status') {
         $body = 'smoke php ' . PHP_VERSION . ' settings ' . count(load_settings($db));
         $status = 200;
+    } else {
+        $status = 404;
     }
     if ($status >= 200 && $status < 300) {
         $requests++;
