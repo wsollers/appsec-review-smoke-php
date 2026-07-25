@@ -10,6 +10,11 @@ All notable changes to this project are documented in this file. The format foll
 - Smoke service with ping, tool and asset actions.
 - Composer manifest pinning the HTTP client, templating and mail libraries.
 
+### Changed
+
+- Unknown actions answer 404.
+- `tools/make-history.sh` reproduces the commit graph.
+
 ### Security
 
 - 2026-01-10: Upgraded phpmailer/phpmailer from 6.4.0 to 6.5.0 (GHSA-77mr-wc79-m8j3 / CVE-2021-3603, untrusted code loaded by the language-file path, and CVE-2021-34551).
