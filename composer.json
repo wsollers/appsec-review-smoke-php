@@ -6,7 +6,7 @@
     "require": {
         "php": "^8.3",
         "guzzlehttp/guzzle": "7.4.0",
-        "twig/twig": "3.3.0",
+        "twig/twig": "3.27.0",
         "phpmailer/phpmailer": "6.5.0"
     },
     "conflict": {
